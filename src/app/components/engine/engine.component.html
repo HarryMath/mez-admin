@@ -1,0 +1,85 @@
+<div class="engine" [ngClass]="getClass()">
+  <div class="engine-controls unselectable">
+    <div *ngIf="isEditable()" (click)="save()">сохранить <i class="fas fa-save"></i></div>
+    <div *ngIf="!isEditable()" (click)="edit()">реадктировать <i class="fas fa-pen-square"></i></div>
+    <div *ngIf="isEditable()" (click)="cancel()">отменить <i class="fas fa-window-close"></i></div>
+    <div *ngIf="!isEditable()" (click)="delete()">удалить <i class="fas fa-trash-alt"></i></div>
+  </div>
+  <div class="engine-top">
+    <div class="engine-avatar">
+      <div [style]="getPhotoCss()"></div>
+      <input
+        type="file"
+        class="photo-input"
+        [disabled]="!isEditable()"
+        (change)="handleAvatarChange($event)">
+    </div>
+    <div class="engine-info">
+      <label>
+        <span *ngIf="isEditable()">название </span>
+        <input class="engine-name" type="text" [(ngModel)]="engine.name" [disabled]="!isEditable()">
+      </label>
+      <label>
+        <span *ngIf="isEditable()">тип </span>
+        <select class="engine-type" [(ngModel)]="this.type" [disabled]="!isEditable()">
+          <option value="" disabled selected></option>
+          <option *ngFor="let type of catalogService.categories">{{type.name}}</option>
+        </select>
+      </label>
+      <label>
+        <span *ngIf="isEditable()">производитель </span>
+        <select class="engine-manuf" [(ngModel)]="engine.manufacturer" [disabled]="!isEditable()">
+          <option value="ОАО «Могилевлифтмаш»" selected>ОАО «Могилевлифтмаш»</option>
+        </select>
+      </label>
+      <label>
+        <span *ngIf="isEditable()">масса </span>
+        <input class="engine-mass" type="number" [(ngModel)]="engine.mass" [disabled]="!isEditable()"
+        [style]="'width: ' + (('0' + engine.mass).length * 8) + 'px'">кг
+      </label>
+      <label>
+        <span *ngIf="isEditable()">цена </span>
+        ₽<input class="engine-price" type="number" [(ngModel)]="engine.price" [disabled]="!isEditable()">
+      </label>
+    </div>
+  </div>
+  <div class="separator" *ngIf="engine.characteristics.length > 0 || isEditable()">Характеристики:</div>
+  <div class="engine-characteristics" *ngIf="engine.characteristics.length > 0 || isEditable()">
+    <div class="row unselectable">
+      <div><div>Р, кВт</div></div>
+      <div><div>Номин. частота, <span style="white-space: nowrap">об/мин</span></div></div>
+      <div><div>КПД, %</div></div>
+      <div><div>cos φ</div></div>
+      <div><div>Iн (220В), А</div></div>
+      <div><div>Iн (380В), А</div></div>
+      <div><div>Iп/Iн</div></div>
+      <div><div>Мп/Мн</div></div>
+      <div><div>Мmax/Мн</div></div>
+      <div><div>Мmin/Мн</div></div>
+    </div>
+    <div *ngFor="let row of engine.characteristics" class="row">
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.power">
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.frequency" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.efficiency" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.cosFi" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal220" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal380" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityRatio" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsRatio" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMaxRatio" >
+      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMinRatio" >
+    </div>
+  </div>
+  <div class="engine-photos" *ngIf="engine.photos.length > 0 || isEditable()">
+    <div *ngFor="let photo of engine.photos">
+      <div [style]="'background-image: url(' + photo + ')'"></div>
+      <div class="overlay">
+        <i class="fas fa-trash-alt"></i>
+      </div>
+    </div>
+    <div class="add-photo" *ngIf="isEditable()">
+      <div></div>
+      <input type="file" (change)="handlePhotoAdd($event)">
+    </div>
+  </div>
+</div>

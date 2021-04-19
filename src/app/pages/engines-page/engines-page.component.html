@@ -1,0 +1,18 @@
+<app-menu class="menu"></app-menu>
+<div class="content">
+  <app-header class="header"></app-header>
+  <div class="main-wrapper">
+    <div class="main">
+      <div class="main-header row">
+        <div class="title"> Двигатели</div>
+        <div class="btn addButton" (click)="catalogService.addEngineTemplate()">добавить +</div>
+      </div>
+      <div class="main-content">
+        <app-engine class="item"
+                    *ngFor="let engine of catalogService.engines"
+                    [engine]="engine"
+        ></app-engine>
+      </div>
+    </div>
+  </div>
+</div>

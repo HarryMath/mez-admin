@@ -1,1 +1,258 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --content-size: calc(1020px + 15vw);
+  --padding-size: calc(10px + 0.5vw);
+  --menu-width: calc(210px + 5.25vw);
+  --line-height: calc(40px + 1vw);
+  --avatar-height: calc(120px + 3vw);
+
+
+  --checkbox-size: calc(17px + 0.425vw);
+  --search-width: calc(250px + 12.5vw);
+  --form-width: calc(270px + 13.5vw);
+
+  --accent-color-light: #ffcb2b;
+  --accent-color: #ffa610;
+  --accent-color-dark: #f5820c;
+  --green-color: #4caf50;
+  --primary-color-light: #5c7fd1;
+  --primary-color: #122c44;
+  --primary-color-dark: #131c36;
+  --header-color: #535e5bd4;
+  --tooltip-color: #292929f0;
+  --my-border-color: #77777777;
+  --background-color:  #fbfcff;
+}
+
+/*_____________ REBOOT _____________*/
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin: 0;
+  font-weight: 400;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-size: calc(13px + 0.325vw);
+  color: #444;
+  background: var(--background-color);
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+a {
+  color: unset;
+  text-decoration: none;
+}
+p {
+  margin-block-start: 0;
+  margin-block-end: 1em;
+}
+hr {
+  height: 1px;
+  border: none;
+  background: #8888885d;
+}
+i {
+  font-size: calc(11px + 0.275vw);
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/*______________TOOLS _______________*/
+.notification {
+  position: fixed; left: 20px; bottom: 20px;
+  opacity: 0;
+  z-index: 100;
+  min-width: calc(70px + 10vw);  max-width: calc(100% - 40px);
+  padding: var(--padding-size); padding-right: 0;
+  font-weight: 500; background-color: #383e4e;  border: 1px solid #eeeeee2d; color: #eee; border-radius: 4px;
+  overflow: hidden;
+  font-size: 15px;
+  transition: 0.35s linear;
+  transform: translateY(30vh);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.notification.visible {
+  opacity: 1;
+  transform: none;
+}
+.notification> .closer {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 25px;
+  cursor: pointer;
+  opacity: 0.5;
+  margin: 0 10px 0 25px;
+}
+.notification> .closer::after {
+  content: ""; left: 0; top: 0;
+  position: absolute; width: 100%; height: 100%;
+  border-radius: 50%; background-color: #b3bdff47;
+  opacity: 0.5; transition: 0.2s; transform: scale(0);
+}
+.notification> .closer:hover::after {
+  opacity: 1; transform: none;
+}
+.hidden {
+  display: none;
+}
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.underlined {
+  text-decoration: underline;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.with-tooltip {
+  position: relative;
+  width: fit-content;
+  z-index: 1;
+}
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.2);
+  display: none;
+  opacity: 0;
+  background-color: var(--tooltip-color);
+  width: max-content;
+  max-width: 210px;
+  color: #fff;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: calc(13px + 0.1vw);
+  z-index: 1;
+  font-weight: 400;
+  text-transform: none;
+}
+.tooltip> p {
+  margin-bottom: 4px;
+}
+.tooltip-additional {
+  display: block;
+  opacity: 0.7;
+  font-size: 12px;
+}
+.tooltip:after {
+  content: "";
+  position: absolute;
+  bottom: 100%; left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent var(--tooltip-color) transparent;
+}
+.with-tooltip:hover .tooltip {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%)
+}
+.with-columns, .row {
+  display: flex;
+}
+.row {
+  align-items: center;
+  justify-content: space-between;
+}
+.btn {
+  border-radius: 6px;
+  cursor: pointer;
+  height: calc(var(--line-height) * 0.6);
+  line-height: calc(var(--line-height) * 0.6);
+  padding: 0 calc(var(--padding-size)*1.5);
+  font-weight: 500; user-select: none;
+  white-space: nowrap; text-align: center;
+  box-shadow: inset -1px -2px 1px 1px #00000029, inset 1px 2px 1px 1px #ffffff40, 1px 2px 4px 0 #01040e50;
+}
+.btn:active {
+  box-shadow: inset -1px -2px 1px 1px #ffffff25, inset 1px 2px 2px 1px #00000030;
+}
+.btn-primary {
+  background-color: var(--accent-color-light);
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: var(--accent-color);
+}
+.btn-primary:active {
+  background-color: var(--accent-color-dark);
+}
+h1, h2, h3 {
+  font-size: calc(20px + 0.5vw);
+}
+h4, h5 {
+  font-size: calc(17px + 0.425vw);
+  font-weight: 500;
+  margin: 0;
+}
+h6 {
+  font-size: calc(16px + 0.4vw);
+  font-weight: 400;
+  margin: 0;
+}
+/* ___________ STYLES ____________ */
+.menu {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--menu-width);
+  background: var(--primary-color);
+  padding: 0 var(--padding-size);
+  height: 100vh; overflow: hidden;
+  color: #fff;
+  transition: width 0.1s;
+}
+.content {
+  position: absolute; top: 0; right: 0;
+  width: calc(100% - var(--menu-width));
+  height: 100vh; overflow: hidden;
+  transition: width 0.1s; background-color: #f6f7f9;
+}
+.header {
+  position: absolute; top: 0;
+  color: var(--primary-color);
+  width: 100%; height: var(--line-height);
+  line-height: var(--line-height);
+  padding: 0 var(--padding-size);
+  border-bottom: 1px solid #77889977;
+}
+.main-wrapper {
+  position: absolute; top: var(--line-height);
+  width: 100%; height: calc(100% - var(--line-height));
+  overflow-x: hidden; overflow-y: scroll;
+  padding: var(--padding-size);
+}
+.main {
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--content-size);
+  padding: 0 var(--padding-size);
+}
+.main-header> .title {
+  color: var(--primary-color);
+  opacity: 0.9;
+  font-weight: 500;
+  font-size: calc(17px + 0.425vw);
+  padding: var(--padding-size) 0;
+}
