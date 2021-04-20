@@ -51,31 +51,31 @@ export interface EngineUpload {
   photos: string[];
 }
 
-export interface Characteristics {
-  engineId: number;
-  power: number;
-  frequency: number;
-  efficiency: number;
-  cosFi: number;
-  electricityNominal220: number;
-  electricityNominal380: number;
-  electricityRatio: number;
-  momentsRatio: number;
-  momentsMaxRatio: number;
-  momentsMinRatio: number;
+export class Characteristics {
+  engineId: number|null = null;
+  power: number|null = null;
+  frequency: number|null = null;
+  efficiency: number|null = null;
+  cosFi: number|null = null;
+  electricityNominal220: number|null = null;
+  electricityNominal380: number|null = null;
+  electricityRatio: number|null = null;
+  momentsRatio: number|null = null;
+  momentsMaxRatio: number|null = null;
+  momentsMinRatio: number|null = null;
 }
 
 @Injectable({providedIn: 'root'})
 export class CatalogService {
   engines: EngineDetails[] = [];
   categories: CategoryPreview[] = [];
-  apiAddressTest = 'http://localhost';
+  // apiAddress = 'http://localhost';
   apiAddress = 'https://mez-api.herokuapp.com';
 
   constructor(private http: HttpClient) {}
 
   loadEngines(): Observable<EngineDetails[]> {
-    return this.http.get<EngineDetails[]>(this.apiAddressTest + '/engines?amount=24&offset=0&withDetails=true')
+    return this.http.get<EngineDetails[]>(this.apiAddress + '/engines?amount=24&offset=0&withDetails=true')
       .pipe(
         tap(response => this.engines = response.reverse() )
       );
@@ -86,20 +86,31 @@ export class CatalogService {
       id: null, name: '', type: {
         name: '', shortDescription: '', fullDescription: '', photo: null
       }, manufacturer: 'ОАО «Могилевлифтмаш»', price: 0, mass: 0, photo: '',
-      characteristics: [{ power: 0, frequency: 0, efficiency: 0, cosFi: 1,
-        electricityNominal220: 0, electricityNominal380: 0, electricityRatio: 0,
-        momentsRatio: 0, momentsMaxRatio: 0, momentsMinRatio: 0, engineId: 0
-      }],
+      characteristics: [new Characteristics()],
       photos: []
     });
   }
 
   createEngine(engine: EngineUpload): Observable<number> {
-    return this.http.put<number>(this.apiAddressTest + '/engines/create', engine);
+    return this.http.put<number>(this.apiAddress + '/engines/create', engine);
+  }
+
+  reloadEngine(id: number|null): void {
+    if (id == null) { return; }
+    this.http.get<EngineDetails>(this.apiAddress + `/engines/${id}?withDetails=true`)
+      .subscribe(response => {
+        if (response !== null) {
+          for (let i = 0; i < this.engines.length; i++) {
+            if (this.engines[i].id === id) {
+              this.engines[i] = response;
+            }
+          }
+        }
+      });
   }
 
   deleteEngine(id: number): Observable<number> {
-    return this.http.get<number>(this.apiAddressTest + `/engines/${id}/delete`);
+    return this.http.get<number>(this.apiAddress + `/engines/${id}/delete`);
   }
 
   uploadPhoto(photo: File): Observable<HttpEvent<unknown>> {
@@ -107,13 +118,13 @@ export class CatalogService {
     photoData.append('photo', photo);
     const photoRequest = new HttpRequest(
       'PUT',
-      this.apiAddressTest + '/images/save',
+      this.apiAddress + '/images/save',
       photoData);
     return this.http.request(photoRequest);
   }
 
   loadCategories(): Observable<CategoryPreview[]> {
-    return this.http.get<CategoryPreview[]>(this.apiAddressTest + '/categories?withDetails=false')
+    return this.http.get<CategoryPreview[]>(this.apiAddress + '/categories?withDetails=false')
       .pipe(
         tap(response => this.categories = response )
       );
