@@ -69,8 +69,8 @@ export class Characteristics {
 export class CatalogService {
   engines: EngineDetails[] = [];
   categories: CategoryPreview[] = [];
-  // apiAddress = 'http://localhost';
-  apiAddress = 'https://mez-api.herokuapp.com';
+  apiAddress = 'http://localhost';
+  // apiAddress = 'https://mez-api.herokuapp.com';
 
   constructor(private http: HttpClient) {}
 

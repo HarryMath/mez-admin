@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CatalogService, Characteristics, EngineDetails, EngineUpload} from '../../shared/catalog.service';
-import {HttpEventType, HttpResponse} from '@angular/common/http';
+import {HttpResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-engine',
@@ -95,6 +95,10 @@ export class EngineComponent implements OnInit {
     }
   }
 
+  removePhoto(i: number): void {
+    this.engine.photos.splice(i, 1);
+  }
+
   getPhotoCss(): string {
     let style = '';
     if (!this.isEditable()) {
@@ -135,33 +139,38 @@ export class EngineComponent implements OnInit {
     if (this.engine.name.trim().length > 2 &&
       this.type.trim().length > 3 &&
       this.engine.manufacturer.trim().length > 3 &&
-      this.engine.price > 10 &&
-      this.engine.characteristics.length > 0)
+      this.engine.price > 10)
     {
-      this.isLoading = true;
       const rowsAmount = this.engine.characteristics.length;
-      if (!this.isRowValid(rowsAmount - 1)) {
+      if (this.isRowEmpty(rowsAmount - 1)) {
         this.engine.characteristics.splice(rowsAmount - 1, 1);
       }
-      this.isNew ? this.saveNew() : this.update();
+      if (this.engine.characteristics.length > 0 && this.characteristicsValid) {
+        this.isLoading = true;
+        this.saveChanges();
+      } else { // @ts-ignore
+        message.show('заполните характеристики');
+        this.handleCharacteristicsChange();
+      }
     } else { // @ts-ignore
-      message.show('заполните имя, тип, производилея и сохраните характеристики');
+      message.show('заполните имя, тип, массу и производилея');
     }
   }
 
-  saveNew(): void {
+  saveChanges(): void {
     const engine: EngineUpload = {
-      id: null, name: this.engine.name, type: this.type,
-      manufacturer: this.engine.manufacturer, price: this.engine.price, mass: this.engine.mass, photo: null,
+      id: this.engine.id, name: this.engine.name, type: this.type,
+      manufacturer: this.engine.manufacturer, price: this.engine.price, mass: this.engine.mass, photo: this.engine.photo,
       characteristics: this.engine.characteristics, photos: []};
     const handleResponse = (response: number) => {
+      this.isLoading = false;
       if (response > 0) { // @ts-ignore
-        window.message.show('двигатель создан');
+        window.message.show('двигатель сохранён');
         this.engine.id = response;
         this.isNew = false; this.onEdit = false;
-        this.isLoading = false;
+        this.handleCharacteristicsChange();
       } else { // @ts-ignore
-        window.message.show('не удалось создать двигатель');
+        window.message.show('не удалось сохранить двигатель');
       }};
 
     if (this.avatar !== null) {
@@ -175,10 +184,6 @@ export class EngineComponent implements OnInit {
     } else {
       this.catalogService.createEngine(engine).subscribe(handleResponse);
     }
-  }
-
-  update(): void {
-    this.isLoading = false;
   }
 
   edit(): void {

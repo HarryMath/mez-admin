@@ -119,6 +119,23 @@ label{ display: block}
   background-position:  center;
   background-size: contain;
 }
+.overlay {
+  background-color: #0000008d;
+  opacity: 0; transition: opacity 0.1s;
+  position: relative; color: #fff;
+}
+.overlay> i {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -15%);
+  opacity: 0.2; cursor: pointer;
+  transition: 0.15s;
+}
+.overlay:hover { opacity: 1 }
+.overlay:hover > i {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  font-size: calc(18px + 0.45vw);
+}
 .engine-photos> div> input {
   position: absolute; height: 100%; width: 100%;
   z-index: 2; opacity: 0; cursor: pointer;

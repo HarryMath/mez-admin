@@ -71,11 +71,11 @@
       <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMinRatio" (ngModelChange)="handleCharacteristicsChange()">
     </div>
   </div>
-  <div class="engine-photos" *ngIf="engine.photos.length > 0 || isEditable()">
-    <div *ngFor="let photo of engine.photos">
+  <div class="engine-photos unselectable" *ngIf="engine.photos.length > 0 || isEditable()">
+    <div *ngFor="let photo of engine.photos; index as i">
       <div [style]="'background-image: url(' + photo + ')'"></div>
       <div class="overlay">
-        <i class="fas fa-trash-alt"></i>
+        <i class="fas fa-trash-alt" (click)="removePhoto(i)"></i>
       </div>
     </div>
     <div class="add-photo" *ngIf="isEditable()">

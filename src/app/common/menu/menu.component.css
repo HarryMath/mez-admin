@@ -1,0 +1,37 @@
+.menu {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--menu-width);
+  background-color: var(--primary-color);
+  background-image: url("/assets/menu.png");
+  background-size: cover; background-position: left;
+  height: 100vh; overflow: hidden;
+  color: #fff;
+  transition: width 0.15s;
+}
+.menu.menu-off {width: calc(var(--line-height));}
+.darken {
+  background-color: #0200013d;
+}
+.menu-header {
+  padding: 0 var(--padding-size);
+  height: var(--line-height); width: 100%;
+  line-height: var(--line-height);
+  box-shadow: 0 -1px 0 #ffffff1a inset;
+  font-size: calc(18px + 0.45vw);
+  display: flex;
+}
+.logo {
+  width: var(--line-height);
+  height: var(--line-height);
+  background: url("/assets/logo.png") no-repeat left;
+  background-size: cover;
+  transform: translateX(-10%) scale(0.8);
+}
+.app-name {
+  width: calc(100% - var(--line-height));
+  overflow: hidden;
+  white-space: nowrap;
+}
+.menu-off .menu-header {padding: 0;}
+.menu-off .logo {background-position: center;transform: scale(0.8);}

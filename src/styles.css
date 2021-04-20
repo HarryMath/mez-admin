@@ -213,21 +213,14 @@ h6 {
   margin: 0;
 }
 /* ___________ STYLES ____________ */
-.menu {
-  position: fixed;
-  top: 0; left: 0;
-  width: var(--menu-width);
-  background: var(--primary-color);
-  padding: 0 var(--padding-size);
-  height: 100vh; overflow: hidden;
-  color: #fff;
-  transition: width 0.1s;
-}
 .content {
   position: absolute; top: 0; right: 0;
   width: calc(100% - var(--menu-width));
   height: 100vh; overflow: hidden;
-  transition: width 0.1s; background-color: #f6f7f9;
+  transition: width 0.15s; background-color: #f6f7f9;
+}
+.content.menu-off {
+  width: calc(100% - var(--line-height));
 }
 .header {
   position: absolute; top: 0;
