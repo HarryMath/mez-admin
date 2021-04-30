@@ -10,6 +10,8 @@ import { EngineComponent } from './components/engine/engine.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
+import { CategoryComponent } from './components/category/category.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import {HttpClientModule} from '@angular/common/http';
     MenuComponent,
     EnginesPageComponent,
     EngineComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    CategoriesPageComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

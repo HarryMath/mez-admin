@@ -1,13 +1,20 @@
-<div class="engine" [ngClass]="getClass()">
-  <div class="engine-overlay" *ngIf="isLoading"></div>
-  <div class="engine-controls unselectable">
-    <div *ngIf="isEditable()" (click)="save()">сохранить <i class="fas fa-save"></i></div>
-    <div *ngIf="!isEditable()" (click)="edit()">реадктировать <i class="fas fa-pen-square"></i></div>
-    <div *ngIf="isEditable()" (click)="cancel()">отменить <i class="fas fa-window-close"></i></div>
-    <div *ngIf="!isEditable()" (click)="delete()">удалить <i class="fas fa-trash-alt"></i></div>
+<div class="engine entity" [ngClass]="getClass()">
+
+  <div class="entity-overlay" *ngIf="isLoading"></div>
+
+  <div class="controls unselectable">
+    <div class="save" *ngIf="isEditable()" (click)="save()">
+      <i class="fas fa-clipboard-check absolute-center"></i></div>
+    <div *ngIf="!isEditable()" (click)="edit()">
+      <i class="fas fa-pen-square absolute-center"></i></div>
+    <div *ngIf="isEditable()" (click)="cancel()">
+      <i class="fas fa-undo absolute-center"></i></div>
+    <div class="delete" (click)="delete()">
+      <i class="fas fa-trash-alt absolute-center"></i></div>
   </div>
+
   <div class="engine-top">
-    <div class="engine-avatar">
+    <div class="avatar">
       <div [style]="getPhotoCss()"></div>
       <input
         type="file"
@@ -44,6 +51,7 @@
       </label>
     </div>
   </div>
+
   <div class="separator" *ngIf="engine.characteristics.length > 0 || isEditable()">Характеристики:</div>
   <div class="engine-characteristics" *ngIf="engine.characteristics.length > 0 || isEditable()">
     <div class="row unselectable">
@@ -58,17 +66,19 @@
       <div><div>Мmax/Мн</div></div>
       <div><div>Мmin/Мн</div></div>
     </div>
-    <div *ngFor="let row of engine.characteristics" class="row">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.power" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.frequency" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.efficiency" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.cosFi" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal220" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal380" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityRatio" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsRatio" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMaxRatio" (ngModelChange)="handleCharacteristicsChange()">
-      <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMinRatio" (ngModelChange)="handleCharacteristicsChange()">
+    <div *ngFor="let row of engine.characteristics; let i = index" class="characteristics-data">
+      <div *ngIf="isEditable() || isRowValid(i)" class="row">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.power" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.frequency" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.efficiency" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.cosFi" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal220" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal380" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityRatio" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsRatio" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMaxRatio" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMinRatio" (ngModelChange)="handleCharacteristicsChange()">
+      </div>
     </div>
   </div>
   <div class="engine-photos unselectable" *ngIf="engine.photos.length > 0 || isEditable()">

@@ -188,15 +188,12 @@ export class EngineComponent implements OnInit {
 
   edit(): void {
     this.onEdit = true;
-    this.engine.characteristics.push(new Characteristics());
+    this.handleCharacteristicsChange();
   }
 
   cancel(): void {
     if (this.isNew) {
-      const index = this.catalogService.engines.indexOf(this.engine);
-      if (index >= 0) {
-        this.catalogService.engines.splice(index, 1);
-      }
+      this.remove();
     } else {
       this.isLoading = true;
       this.catalogService.reloadEngine(this.engine.id);
@@ -205,13 +202,19 @@ export class EngineComponent implements OnInit {
   }
 
   delete(): void {
+    if (this.isNew) {
+      this.remove();
+      return;
+    }
     this.isLoading = true; // @ts-ignore
     this.catalogService.deleteEngine(this.engine.id)
       .subscribe(response => {
-        if (response === 1) {
+        if (response === 1) { // @ts-ignore
+          window.message.show('двигатель удалён');
           this.remove();
         } else { // @ts-ignore
           window.message.show('удалить не удалось. Перезагрузите страницу и попробуйте еще раз');
+          this.isLoading = false;
         }
       });
   }

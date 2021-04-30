@@ -2,13 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-
-export interface Category {
-  name: string;
-  photo: string|null;
-  shortDescription: string;
-  fullDescription: string;
-}
+import {Category} from './categories.service';
 
 export interface CategoryPreview {
   name: string;
@@ -75,7 +69,7 @@ export class CatalogService {
   constructor(private http: HttpClient) {}
 
   loadEngines(): Observable<EngineDetails[]> {
-    return this.http.get<EngineDetails[]>(this.apiAddress + '/engines?amount=24&offset=0&withDetails=true')
+    return this.http.get<EngineDetails[]>(this.apiAddress + '/engines?withDetails=true')
       .pipe(
         tap(response => this.engines = response.reverse() )
       );

@@ -1,0 +1,18 @@
+<app-menu></app-menu>
+<div class="content" [ngClass]="menuService.isOpened? '' : 'menu-off'">
+  <app-header class="header"></app-header>
+  <div class="main-wrapper">
+    <div class="main">
+      <div class="main-header row">
+        <div class="title"> Категории двигателей</div>
+        <div class="btn btn-secondary" (click)="categoriesService.addCategoryTemplate()">добавить +</div>
+      </div>
+      <div class="main-content">
+        <app-category class="item"
+                    *ngFor="let category of categoriesService.categories"
+                    [category]="category"
+        ></app-category>
+      </div>
+    </div>
+  </div>
+</div>

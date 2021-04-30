@@ -14,7 +14,8 @@
   --accent-color: #ffa610;
   --accent-color-dark: #f5820c;
   --green-color: #4caf50;
-  --primary-color-light: #5c7fd1;
+  --red-color: #dd153d;
+  --primary-color-light: #4a6ebc;
   --primary-color: #122c44;
   --primary-color-dark: #131c36;
   --header-color: #535e5bd4;
@@ -67,11 +68,11 @@ input[type=number] {
 }
 /*______________TOOLS _______________*/
 .notification {
-  position: fixed; left: 20px; bottom: 20px;
+  position: fixed; right: 20px; bottom: 20px;
   opacity: 0;
   z-index: 100;
   min-width: calc(70px + 10vw);  max-width: calc(100% - 40px);
-  padding: var(--padding-size); padding-right: 0;
+  padding: calc(var(--padding-size)*0.5) var(--padding-size); padding-right: 0;
   font-weight: 500; background-color: #383e4e;  border: 1px solid #eeeeee2d; color: #eee; border-radius: 4px;
   overflow: hidden;
   font-size: 15px;
@@ -177,17 +178,26 @@ input[type=number] {
   justify-content: space-between;
 }
 .btn {
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   height: calc(var(--line-height) * 0.6);
   line-height: calc(var(--line-height) * 0.6);
   padding: 0 calc(var(--padding-size)*1.5);
   font-weight: 500; user-select: none;
   white-space: nowrap; text-align: center;
-  box-shadow: inset -1px -2px 1px 1px #00000029, inset 1px 2px 1px 1px #ffffff40, 1px 2px 4px 0 #01040e50;
 }
-.btn:active {
-  box-shadow: inset -1px -2px 1px 1px #ffffff25, inset 1px 2px 2px 1px #00000030;
+.btn-secondary {
+  box-shadow: 0 0 0 1px #7c7c7c5e;
+  color: var(--primary-color-light);
+  transition: 0.1s;
+}
+.btn-secondary:hover {
+  background-color: #fff;
+  box-shadow: 0 0 0 2px #5c7fd15e;
+}
+.btn-secondary:active {
+  background-color: #fff;
+  box-shadow: 0 0 0 1px #5c7fd1ae, 0 0 0 3px #5c7fd15e;
 }
 .btn-primary {
   background-color: var(--accent-color-light);
@@ -217,7 +227,7 @@ h6 {
   position: absolute; top: 0; right: 0;
   width: calc(100% - var(--menu-width));
   height: 100vh; overflow: hidden;
-  transition: width 0.15s; background-color: #f6f7f9;
+  transition: width 0.3s; background-color: #f6f7f9;
 }
 .content.menu-off {
   width: calc(100% - var(--line-height));
@@ -244,8 +254,82 @@ h6 {
 }
 .main-header> .title {
   color: var(--primary-color);
-  opacity: 0.9;
+  opacity: 0.75;
   font-weight: 500;
   font-size: calc(17px + 0.425vw);
   padding: var(--padding-size) 0;
+}
+
+/* _____________ ENTITY ______________*/
+.entity {
+  box-shadow: 0 1px 2px 0 #3c40434d, 0 1px 3px 1px #3c404326;
+  border-radius: 8px;
+  background-color: #fff;
+  margin-bottom: var(--padding-size);
+  overflow: hidden; position: relative;
+  transition: 0.1s;
+}
+.entity-overlay {
+  position: absolute; width: 100%; height: 100%;
+  background-color: #ffffff; z-index: 5;
+  /*backdrop-filter: blur(3px);*/
+}
+@keyframes loader-anim {
+  0%{ transform: translate(-50%, -50%) rotate(0deg) }
+  100% { transform: translate(-50%, -50%) rotate(359deg) }
+}
+.entity-overlay::after {
+  content: ""; width: calc(40px + 1vw); height: calc(40px + 1vw);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 4px solid #3f51b5; border-radius: 50%;
+  border-right-color: transparent;
+  animation: loader-anim 1s linear infinite;
+}
+.new { box-shadow: 0 0 0 2px #4caf589e, 0 0 0 5px #58dc396e; }
+.editable { box-shadow: 0 0 0 2px #3f51b594, 0 0 0 5px #03a9f47a; }
+
+/*____________ ENTITY CONTROLS __________*/
+.controls {
+  position: absolute; border-radius: 4px;
+  background-color: #fff;
+  right: calc(var(--padding-size) * 0.5); top: calc(var(--padding-size) * 0.5);
+  z-index: 3; display: flex; flex-direction: row;
+  opacity: 0; transition: opacity 0.2s;
+}
+.entity:hover .controls { opacity: 1; }
+.controls> div {
+  font-weight: 500; border-radius: 50%;
+  height: calc(var(--line-height)*0.7);
+  width: calc(var(--line-height)*0.7);
+  line-height: calc(var(--line-height)*0.7);
+  cursor: pointer; position: relative; margin: 3px;
+  color: var(--primary-color); opacity: 0.7; transition: 0.2s;
+}
+.controls> div> i { font-size: calc(14px + 0.35vw);}
+.controls> div:hover {
+  background-color: #eeeeff9d; opacity: 1; color: var(--primary-color-light);
+}
+.controls> .save:hover { background-color: #4CAF501d; color: var(--green-color) }
+.controls> .delete:hover { background-color: #DD153D1d; color: var(--red-color) }
+
+/*____________ ENTITY AVATAR __________*/
+.avatar {
+  width: var(--avatar-height);
+  height: var(--avatar-height);
+  overflow: hidden; position: relative;
+}
+.avatar> div {
+  width: calc(100% - var(--padding-size));
+  height: calc(100% - var(--padding-size));
+  position: absolute;
+  border: 3px dashed #77889988; border-radius: 4px;
+  background: url("/assets/photo.png") no-repeat center;
+  background-size: contain;
+  z-index: 1; margin: calc(var(--padding-size)*0.5);
+}
+.avatar> input {
+  width: 100%!important; height: 100%!important;
+  position: absolute!important; z-index: 2!important;
+  opacity: 0!important; cursor: pointer; margin: 0!important;
 }

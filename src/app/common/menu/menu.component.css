@@ -7,26 +7,28 @@
   background-size: cover; background-position: left;
   height: 100vh; overflow: hidden;
   color: #fff;
-  transition: width 0.15s;
+  transition: width 0.3s;
+  z-index: 4;
 }
 .menu.menu-off {width: calc(var(--line-height));}
 .darken {
-  background-color: #0200013d;
+  background-color: #0000002d;
 }
 .menu-header {
+  position: absolute; top: 0;
   padding: 0 var(--padding-size);
   height: var(--line-height); width: 100%;
   line-height: var(--line-height);
-  box-shadow: 0 -1px 0 #ffffff1a inset;
+  box-shadow: 0 -1px 0 #ffffff30 inset;
   font-size: calc(18px + 0.45vw);
-  display: flex;
+  display: flex; transition: 0.2s;
 }
 .logo {
   width: var(--line-height);
   height: var(--line-height);
-  background: url("/assets/logo.png") no-repeat left;
+  background: url("/assets/logo.png") no-repeat center;
+  transform: translateX(-5%) scale(0.9);
   background-size: cover;
-  transform: translateX(-10%) scale(0.8);
 }
 .app-name {
   width: calc(100% - var(--line-height));
@@ -34,4 +36,67 @@
   white-space: nowrap;
 }
 .menu-off .menu-header {padding: 0;}
-.menu-off .logo {background-position: center;transform: scale(0.8);}
+.menu-off .logo { transform: scale(0.9);}
+
+
+
+
+.menu-content {
+  margin-top: var(--line-height);
+  width: 100%;
+}
+.menu-section {
+  height: var(--line-height);
+  line-height: var(--line-height);
+  display: flex;
+  flex-wrap: nowrap; white-space: nowrap;
+  align-items: center;
+  color: #fff; cursor: pointer;
+  font-weight: 500;
+  font-size: calc(14px + 0.35vw);
+}
+.menu-section:hover {
+  background-color: #ffffff0d;
+}
+.menu-section .icon {
+  width: var(--line-height);
+  text-align: center;
+}
+.menu-section> span {
+  width: calc(var(--menu-width) - var(--line-height) - var(--padding-size));
+  transition: 0.3s;
+}
+.menu-off .menu-section> span { width: 0;}
+
+
+
+.menu-footer {
+  box-shadow: 0 1px 0 #ffffff30 inset;
+  position: absolute; bottom: 0;
+  width: 100%;
+}
+.menu-footer> div {
+  height: var(--line-height);
+  line-height: var(--line-height);
+  padding: 0 var(--padding-size);
+  white-space: nowrap;
+}
+.menu-switcher {
+  box-shadow: 0 1px 0 #ffffff30 inset; cursor: pointer;
+  height: var(--line-height); position: relative;
+}
+.menu-switcher> i {
+  position: absolute;
+  top: 50%; right: var(--padding-size);
+  transform: translateY(-50%) rotate(-90deg);
+  transition: 0.2s;
+  color: #fff; opacity: 0.9;
+}
+.menu-switcher:hover> i {opacity: 1;}
+.menu-off .menu-switcher> i {
+  transform: translate(50%, -50%) rotate(90deg);
+  right: 50%;
+}
+.menu-off .address, .menu-off .address-label { display: none }
+.menu-off .fa-map-marker-alt { text-align: center; width: 100%}
+
