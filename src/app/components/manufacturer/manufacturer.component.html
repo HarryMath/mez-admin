@@ -1,0 +1,17 @@
+<div class="entity" [ngClass]="isNew? 'new' : ''">
+
+  <div class="entity-overlay" *ngIf="isLoading"></div>
+
+  <div class="controls unselectable">
+    <div class="save" *ngIf="isNew" (click)="save()">
+      <i class="fas fa-clipboard-check absolute-center"></i></div>
+    <div class="delete" (click)="delete()">
+      <i class="fas fa-trash-alt absolute-center"></i></div>
+  </div>
+
+  <label>
+    <span *ngIf="isNew">название</span>
+    <input type="text" [(ngModel)]="manufacturer.name" [disabled]="!isNew">
+  </label>
+
+</div>

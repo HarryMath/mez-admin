@@ -12,6 +12,10 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { CategoryComponent } from './components/category/category.component';
+import { ManufacturersPageComponent } from './pages/manufaturers-page/manufacturers-page.component';
+import { ManufacturerComponent } from './components/manufacturer/manufacturer.component';
+import { NewsPageComponent } from './pages/news-page/news-page.component';
+import { PostComponent } from './components/post/post.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,11 @@ import { CategoryComponent } from './components/category/category.component';
     EngineComponent,
     LoginPageComponent,
     CategoriesPageComponent,
-    CategoryComponent
+    CategoryComponent,
+    ManufacturersPageComponent,
+    ManufacturerComponent,
+    NewsPageComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

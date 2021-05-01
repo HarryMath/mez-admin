@@ -5,35 +5,14 @@
   </div>
 
   <div class="menu-content unselectable">
-    <a class="menu-section" routerLink="/engines">
+    <a *ngFor="let section of sections"
+       class="menu-section"
+       [ngClass]="section.name === activeSection ? 'active' : ''"
+       routerLink="/{{section.name}}">
       <div class="icon" style="position: relative; height: 100%">
-        <img class="absolute-center" src="assets/engine.svg" alt="icon" style="height: calc(12px + 0.3vw)">
+        <img class="absolute-center" src="assets/{{section.icon}}.svg" alt="icon" style="height: calc(12px + 0.3vw)">
       </div>
-      <span>Двигатели</span>
-    </a>
-    <a class="menu-section" routerLink="/categories">
-      <div class="icon" style="position: relative; height: 100%">
-        <img class="absolute-center" src="assets/category.svg" alt="icon" style="height: calc(12px + 0.3vw)">
-      </div>
-      <span>Типы двигателей</span>
-    </a>
-    <a class="menu-section" routerLink="/manufacturers">
-      <div class="icon" style="position: relative; height: 100%">
-        <img class="absolute-center" src="assets/manufacture.svg" alt="icon" style="height: calc(12px + 0.3vw)">
-      </div>
-      <span>Производители</span>
-    </a>
-    <a class="menu-section" routerLink="/news">
-      <div class="icon" style="position: relative; height: 100%">
-        <img class="absolute-center" src="assets/news.svg" alt="icon" style="height: calc(12px + 0.3vw)">
-      </div>
-      <span>Новости</span>
-    </a>
-    <a class="menu-section" routerLink="/news">
-      <div class="icon" style="position: relative; height: 100%">
-        <img class="absolute-center" src="assets/mail.svg" alt="icon" style="height: calc(12px + 0.3vw)">
-      </div>
-      <span>Рассылка</span>
+      <span>{{section.label}}</span>
     </a>
   </div>
 

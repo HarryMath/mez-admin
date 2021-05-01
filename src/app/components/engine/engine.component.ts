@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CatalogService, Characteristics, EngineDetails, EngineUpload} from '../../shared/catalog.service';
 import {HttpResponse} from '@angular/common/http';
+import {CategoriesService} from '../../shared/categories.service';
+import {ImagesService} from '../../shared/images.service';
 
 @Component({
   selector: 'app-engine',
@@ -19,7 +21,8 @@ export class EngineComponent implements OnInit {
   onEdit = false;
   isLoading = false;
 
-  constructor(public catalogService: CatalogService) { }
+  constructor(public catalogService: CatalogService,
+              public imagesService: ImagesService) { }
 
   ngOnInit(): void {
     if (this.engine.price === 0) {
@@ -174,7 +177,7 @@ export class EngineComponent implements OnInit {
       }};
 
     if (this.avatar !== null) {
-      this.catalogService.uploadPhoto(this.avatar)
+      this.imagesService.uploadPhoto(this.avatar)
         .subscribe(event => {
           if (event instanceof HttpResponse) { // @ts-ignore
             engine.photo = event.body.url;

@@ -20,6 +20,7 @@ export class EnginesPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.catalogService.loadManufacturers().subscribe();
     this.catalogService.loadCategories().subscribe(() => {
       this.categoriesLoaded = true;
       this.catalogService.loadEngines().subscribe(() => {

@@ -12,7 +12,7 @@
 }
 .menu.menu-off {width: calc(var(--line-height));}
 .darken {
-  background-color: #0000002d;
+  background-color: #101b328d;
 }
 .menu-header {
   position: absolute; top: 0;
@@ -52,11 +52,15 @@
   flex-wrap: nowrap; white-space: nowrap;
   align-items: center;
   color: #fff; cursor: pointer;
-  font-weight: 500;
+  font-weight: 500; transition: 0.1s;
   font-size: calc(14px + 0.35vw);
 }
 .menu-section:hover {
   background-color: #ffffff0d;
+}
+.menu-section.active {
+  background-color: #101b327d;
+  font-weight: bold;
 }
 .menu-section .icon {
   width: var(--line-height);

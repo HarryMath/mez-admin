@@ -1,0 +1,18 @@
+<app-menu [activeSection]="'news'"></app-menu>
+<div class="content" [ngClass]="menuService.isOpened? '' : 'menu-off'">
+  <app-header class="header"></app-header>
+  <div class="main-wrapper">
+    <div class="main">
+      <div class="main-header row">
+        <div class="title"> Новости и статьи</div>
+        <div class="btn btn-secondary" (click)="newsService.addTemplate()">добавить +</div>
+      </div>
+      <div class="main-content">
+        <app-post class="item"
+                          *ngFor="let post of newsService.news"
+                          [post]="post"
+        ></app-post>
+      </div>
+    </div>
+  </div>
+</div>

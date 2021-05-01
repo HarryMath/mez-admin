@@ -29,7 +29,11 @@
       </label>
       <label>
         <span *ngIf="isEditable()">краткое описание </span>
-        <textarea maxlength="100" [(ngModel)]="category.shortDescription" [disabled]="!isEditable()"></textarea>
+        <textarea
+          maxlength="100"
+          [(ngModel)]="category.shortDescription"
+          oninput="this.style.height = (this.scrollHeight) + 'px'"
+          [disabled]="!isEditable()"></textarea>
       </label>
     </div>
   </div>

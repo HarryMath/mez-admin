@@ -37,7 +37,8 @@
       <label>
         <span *ngIf="isEditable()">производитель </span>
         <select class="engine-manuf" [(ngModel)]="engine.manufacturer" [disabled]="!isEditable()">
-          <option value="ОАО «Могилевлифтмаш»" selected>ОАО «Могилевлифтмаш»</option>
+          <option value="" disabled selected></option>
+          <option *ngFor="let manufacturer of catalogService.manufacturers">{{manufacturer.name}}</option>
         </select>
       </label>
       <label>

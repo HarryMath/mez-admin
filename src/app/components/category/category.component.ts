@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CategoriesService, Category} from '../../shared/categories.service';
 import {HttpResponse} from '@angular/common/http';
 import {ResponseCodes} from '../../shared/response.codes';
+import {ImagesService} from '../../shared/images.service';
 
 @Component({
   selector: 'app-category',
@@ -17,7 +18,9 @@ export class CategoryComponent implements OnInit {
   isLoading = false;
   avatar: File|null = null;
 
-  constructor(public categoriesService: CategoriesService) { }
+  constructor(
+    public categoriesService: CategoriesService,
+    public imagesService: ImagesService) { }
 
   ngOnInit(): void {
     if (this.category.name === '' && this.category.shortDescription === '') {
@@ -66,7 +69,8 @@ export class CategoryComponent implements OnInit {
 
   save(): void {
     if (this.category.name.trim().length > 2 && this.category.shortDescription.trim().length > 4) {
-        this.saveChanges();
+      this.isLoading = true;
+      this.saveChanges();
     } else { // @ts-ignore
       message.show('заполните название и короткое описание');
     }
@@ -87,7 +91,7 @@ export class CategoryComponent implements OnInit {
     };
 
     if (this.avatar !== null) {
-      this.categoriesService.uploadPhoto(this.avatar)
+      this.imagesService.uploadPhoto(this.avatar)
         .subscribe(event => {
           if (event instanceof HttpResponse) { // @ts-ignore
             this.category.photo = event.body.url;

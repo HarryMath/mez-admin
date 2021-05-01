@@ -3,6 +3,8 @@ import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Category} from './categories.service';
+import {apiAddress} from './response.codes';
+import {Manufacturer} from './manufacturers.service';
 
 export interface CategoryPreview {
   name: string;
@@ -63,15 +65,28 @@ export class Characteristics {
 export class CatalogService {
   engines: EngineDetails[] = [];
   categories: CategoryPreview[] = [];
-  apiAddress = 'http://localhost';
-  // apiAddress = 'https://mez-api.herokuapp.com';
+  manufacturers: Manufacturer[] = [];
 
   constructor(private http: HttpClient) {}
 
   loadEngines(): Observable<EngineDetails[]> {
-    return this.http.get<EngineDetails[]>(this.apiAddress + '/engines?withDetails=true')
+    return this.http.get<EngineDetails[]>(apiAddress + '/engines?withDetails=true')
       .pipe(
         tap(response => this.engines = response.reverse() )
+      );
+  }
+
+  loadCategories(): Observable<CategoryPreview[]> {
+    return this.http.get<CategoryPreview[]>(apiAddress + '/categories?withDetails=false')
+      .pipe(
+        tap(response => this.categories = response )
+      );
+  }
+
+  loadManufacturers(): Observable<Manufacturer[]> {
+    return this.http.get<Manufacturer[]>(apiAddress + '/manufacturers?withDetails=false')
+      .pipe(
+        tap(response => this.manufacturers = response )
       );
   }
 
@@ -79,19 +94,19 @@ export class CatalogService {
     this.engines.unshift({
       id: null, name: '', type: {
         name: '', shortDescription: '', fullDescription: '', photo: null
-      }, manufacturer: 'ОАО «Могилевлифтмаш»', price: 0, mass: 0, photo: '',
+      }, manufacturer: '', price: 0, mass: 0, photo: '',
       characteristics: [new Characteristics()],
       photos: []
     });
   }
 
   createEngine(engine: EngineUpload): Observable<number> {
-    return this.http.put<number>(this.apiAddress + '/engines/create', engine);
+    return this.http.put<number>(apiAddress + '/engines/create', engine);
   }
 
   reloadEngine(id: number|null): void {
     if (id == null) { return; }
-    this.http.get<EngineDetails>(this.apiAddress + `/engines/${id}?withDetails=true`)
+    this.http.get<EngineDetails>(apiAddress + `/engines/${id}?withDetails=true`)
       .subscribe(response => {
         if (response !== null) {
           for (let i = 0; i < this.engines.length; i++) {
@@ -104,23 +119,6 @@ export class CatalogService {
   }
 
   deleteEngine(id: number): Observable<number> {
-    return this.http.get<number>(this.apiAddress + `/engines/${id}/delete`);
-  }
-
-  uploadPhoto(photo: File): Observable<HttpEvent<unknown>> {
-    const photoData = new FormData();
-    photoData.append('photo', photo);
-    const photoRequest = new HttpRequest(
-      'PUT',
-      this.apiAddress + '/images/save',
-      photoData);
-    return this.http.request(photoRequest);
-  }
-
-  loadCategories(): Observable<CategoryPreview[]> {
-    return this.http.get<CategoryPreview[]>(this.apiAddress + '/categories?withDetails=false')
-      .pipe(
-        tap(response => this.categories = response )
-      );
+    return this.http.get<number>(apiAddress + `/engines/${id}/delete`);
   }
 }

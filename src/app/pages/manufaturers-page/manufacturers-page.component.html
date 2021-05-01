@@ -1,0 +1,18 @@
+<app-menu [activeSection]="'manufacturers'"></app-menu>
+<div class="content" [ngClass]="menuService.isOpened? '' : 'menu-off'">
+  <app-header class="header"></app-header>
+  <div class="main-wrapper">
+    <div class="main">
+      <div class="main-header row">
+        <div class="title"> Производители</div>
+        <div class="btn btn-secondary" (click)="manufacturersService.addTemplate()">добавить +</div>
+      </div>
+      <div class="main-content">
+        <app-manufacturer class="item"
+                      *ngFor="let manufacturer of manufacturersService.manufacturers"
+                      [manufacturer]="manufacturer"
+        ></app-manufacturer>
+      </div>
+    </div>
+  </div>
+</div>

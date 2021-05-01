@@ -2,7 +2,6 @@ input, select {
   appearance: none; background: transparent;
   outline: none!important;
   border: none; padding: 0;
-  width: 100%;
 }
 
 .engine-top {display: flex;}
