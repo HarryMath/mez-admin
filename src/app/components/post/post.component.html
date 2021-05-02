@@ -1,1 +1,52 @@
-<p>post works!</p>
+<div class="entity" [ngClass]="getClass()">
+
+  <div class="entity-overlay" *ngIf="isLoading"></div>
+
+  <div class="controls unselectable">
+    <div class="save" *ngIf="isEditable()" (click)="save()">
+      <i class="fas fa-clipboard-check absolute-center"></i></div>
+    <div *ngIf="!isEditable()" (click)="edit()">
+      <i class="fas fa-pen-square absolute-center"></i></div>
+    <div *ngIf="isEditable()" (click)="cancel()">
+      <i class="fas fa-undo absolute-center"></i></div>
+    <div class="delete" (click)="delete()">
+      <i class="fas fa-trash-alt absolute-center"></i></div>
+  </div>
+
+  <div class="post-top">
+    <div class="avatar">
+      <div [style]="getPhotoCss()"></div>
+      <input
+        type="file"
+        class="photo-input"
+        [disabled]="!isEditable()"
+        (change)="handleAvatarChange($event)">
+    </div>
+    <div class="post-info">
+      <label>
+        <span *ngIf="isEditable()">Заголовок </span>
+        <input type="text" [(ngModel)]="post.title" [disabled]="!isEditable()">
+      </label>
+      <label>
+        <span *ngIf="isEditable()">текст перед фото (введение) </span>
+        <textarea
+          [(ngModel)]="post.beforePhotoText"
+          oninput="this.style.height = (this.scrollHeight) + 'px'"
+          [disabled]="!isEditable()"></textarea>
+      </label>
+    </div>
+  </div>
+
+  <div class="post-text" *ngIf="isEditable() || post.afterPhotoText.trim().length > 0">
+    <label>
+      <span *ngIf="isEditable()">текст после фото </span>
+      <textarea
+        oninput="this.style.height = (this.scrollHeight) + 'px'"
+        [(ngModel)]="post.afterPhotoText"
+        [disabled]="!isEditable()"></textarea>
+    </label>
+  </div>
+
+  <div class="date unselectable" *ngIf="!isNew">{{post.date}}</div>
+
+</div>

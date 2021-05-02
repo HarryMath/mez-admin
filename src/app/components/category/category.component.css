@@ -7,9 +7,9 @@ input, select, textarea {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.category-top {display: flex;}
-.category-info {padding: var(--padding-size)}
-.category-info textarea {
+.post-top {display: flex;}
+.post-info {padding: var(--padding-size)}
+.post-info textarea {
   max-height: calc(var(--avatar-height)*0.8 - 20px - 0.5vw - var(--padding-size));
   width: 100%; max-width: 100%;
   min-width: 100%;
@@ -17,11 +17,11 @@ input, select, textarea {
   opacity: 0.9;
   min-height: calc(var(--line-height) * 0.5);
 }
-.category-info input {
+.post-info input {
   font-size: calc(16px + 0.4vw);
   font-weight: 500;
 }
-.category-info label { position: relative }
+.post-info label { position: relative }
 label> span {position: absolute; font-size: calc(8px + 0.2vw); opacity: 0.5; top: 0; left: 0}
 .new input, .new textarea,
 .editable input, .editable textarea {
@@ -29,15 +29,15 @@ label> span {position: absolute; font-size: calc(8px + 0.2vw); opacity: 0.5; top
   font-size: 13px; opacity: 1; font-weight: 400;
 }
 label{ display: block; position: relative}
-.category-info {
+.post-info {
   width: calc(90% - var(--avatar-height) - var(--padding-size) * 4);
 }
 
-.category-text {
+.post-text {
   padding: calc(var(--padding-size) *0.5) var(--padding-size);
   width: 100%;
 }
-.category-text textarea {
+.post-text textarea {
   width: 100%; min-width: 100%;
   max-width: 100%; max-height: calc(90px + 1.75vw + 0.25vh);
   height: calc(var(--line-height) * 0.45);

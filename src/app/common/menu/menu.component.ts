@@ -18,7 +18,7 @@ export class MenuComponent implements OnInit {
 
   @Input() activeSection!: string;
   sections: Section[] = [
-    { name: 'engines', label: 'Двишатели', icon: 'engine'},
+    { name: 'engines', label: 'Двигатели', icon: 'engine'},
     { name: 'categories', label: 'Типы двигателей', icon: 'category'},
     { name: 'manufacturers', label: 'Производители', icon: 'manufacture'},
     { name: 'news', label: 'Новости', icon: 'news'},

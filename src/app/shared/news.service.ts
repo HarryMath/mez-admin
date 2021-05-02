@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiAddress} from './response.codes';
 import {tap} from 'rxjs/operators';
+import {Category} from './categories.service';
 
 export interface Post {
   id: number|null;
@@ -31,6 +32,20 @@ export class NewsService {
       .pipe(
         tap(response => this.news = response.reverse())
       );
+  }
+
+  reloadPost(id: number|null): void {
+    if (id == null) { return; }
+    this.http.get<Post>(apiAddress + '/news/' + id)
+      .subscribe(response => {
+        if (response !== null) {
+          for (let i = 0; i < this.news.length; i++) {
+            if (this.news[i].id === id) {
+              this.news[i] = response;
+            }
+          }
+        }
+      });
   }
 
   deletePost(id: number): Observable<number> {
