@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiAddress} from './response.codes';
 import {tap} from 'rxjs/operators';
-import {Category} from './categories.service';
 
 export interface Post {
   id: number|null;
@@ -12,6 +11,7 @@ export interface Post {
   beforePhotoText: string;
   photo: string|null;
   afterPhotoText: string;
+  views: number;
   tags: string;
 }
 
@@ -24,7 +24,8 @@ export class NewsService {
   }
 
   addTemplate(): void {
-    this.news.unshift({id: null, title: '', date: '', beforePhotoText: '', photo: null, afterPhotoText: '', tags: ''});
+    this.news.unshift(
+      {id: null, title: '', date: '', beforePhotoText: '', photo: null, afterPhotoText: '', tags: '', views: 0});
   }
 
   loadNews(): Observable<Post[]> {

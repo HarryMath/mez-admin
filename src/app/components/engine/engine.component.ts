@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CatalogService, Characteristics, EngineDetails, EngineUpload} from '../../shared/catalog.service';
+import {CatalogService, Characteristics, EngineDetails} from '../../shared/catalog.service';
 import {HttpResponse} from '@angular/common/http';
-import {CategoriesService} from '../../shared/categories.service';
 import {ImagesService} from '../../shared/images.service';
 
 @Component({
@@ -13,8 +12,8 @@ export class EngineComponent implements OnInit {
 
   @Input() engine!: EngineDetails;
   avatar: File|null = null;
+  addedPhotos: string[] = [];
   photos: File[] = [];
-  type = '';
   characteristicsValid = true;
 
   isNew = false;
@@ -28,7 +27,6 @@ export class EngineComponent implements OnInit {
     if (this.engine.price === 0) {
       this.isNew = true;
     }
-    this.type = this.engine.type.name;
   }
 
   getClass(): string {
@@ -59,6 +57,10 @@ export class EngineComponent implements OnInit {
 
   handleCharacteristicsChange(): void {
     let length = this.engine.characteristics.length;
+    if (length === 0) {
+      this.engine.characteristics.push(new Characteristics());
+      return;
+    }
     this.characteristicsValid = true;
     for (let i = 0; i < length - 1; i++) {
       if (!this.isRowValid(i)) {
@@ -91,15 +93,20 @@ export class EngineComponent implements OnInit {
       }
       const reader: FileReader = new FileReader();
       reader.onload = () => { // @ts-ignore
-        this.engine.photos.push(reader.result);
+        this.addedPhotos.push(reader.result);
         this.photos.push(file);
       }; // @ts-ignore
       reader.readAsDataURL(file);
     }
   }
 
-  removePhoto(i: number): void {
-    this.engine.photos.splice(i, 1);
+  removePhoto(i: number, isNew: boolean): void {
+    if (isNew) {
+      this.addedPhotos.splice(i, 1);
+      this.photos.splice(i, 1);
+    } else {
+      this.engine.photos.splice(i, 1);
+    }
   }
 
   getPhotoCss(): string {
@@ -140,7 +147,7 @@ export class EngineComponent implements OnInit {
 
   save(): void {
     if (this.engine.name.trim().length > 2 &&
-      this.type.trim().length > 3 &&
+      this.engine.type.name.trim().length > 3 &&
       this.engine.manufacturer.trim().length > 3 &&
       this.engine.price > 10)
     {
@@ -150,7 +157,7 @@ export class EngineComponent implements OnInit {
       }
       if (this.engine.characteristics.length > 0 && this.characteristicsValid) {
         this.isLoading = true;
-        this.saveChanges();
+        this.savePhotosThenChanges();
       } else { // @ts-ignore
         message.show('заполните характеристики');
         this.handleCharacteristicsChange();
@@ -161,11 +168,7 @@ export class EngineComponent implements OnInit {
   }
 
   saveChanges(): void {
-    const engine: EngineUpload = {
-      id: this.engine.id, name: this.engine.name, type: this.type,
-      manufacturer: this.engine.manufacturer, price: this.engine.price, mass: this.engine.mass, photo: this.engine.photo,
-      characteristics: this.engine.characteristics, photos: []};
-    const handleResponse = (response: number) => {
+    this.catalogService.createEngine(this.engine).subscribe(response => {
       this.isLoading = false;
       if (response > 0) { // @ts-ignore
         window.message.show('двигатель сохранён');
@@ -174,18 +177,39 @@ export class EngineComponent implements OnInit {
         this.handleCharacteristicsChange();
       } else { // @ts-ignore
         window.message.show('не удалось сохранить двигатель');
-      }};
+      }
+    });
+  }
 
+  savePhotosThenChanges(): void {
+    let needLoadAvatar = false;
+    let needLoadPhotos = false;
     if (this.avatar !== null) {
+      needLoadAvatar = true;
       this.imagesService.uploadPhoto(this.avatar)
         .subscribe(event => {
           if (event instanceof HttpResponse) { // @ts-ignore
-            engine.photo = event.body.url;
-            this.engine.photo = engine.photo;
-            this.catalogService.createEngine(engine).subscribe(handleResponse);
+            this.engine.photo = event.body.url;
+            needLoadAvatar = false;
+            if (!needLoadAvatar && !needLoadPhotos) {
+              this.saveChanges();
+            }
           }});
-    } else {
-      this.catalogService.createEngine(engine).subscribe(handleResponse);
+    }
+    if (this.photos.length > 0) {
+      needLoadPhotos = true;
+      this.imagesService.uploadPhotos(this.photos, (photos: string[]) => {
+        this.engine.photos = this.engine.photos.concat(photos);
+        console.log(this.engine.photos.length);
+        this.addedPhotos = [];
+        needLoadPhotos = false;
+        if (!needLoadAvatar && !needLoadPhotos) {
+          this.saveChanges();
+        }
+      });
+    }
+    if (!needLoadAvatar && !needLoadPhotos) {
+      this.saveChanges();
     }
   }
 

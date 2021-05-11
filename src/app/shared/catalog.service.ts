@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Category} from './categories.service';
@@ -100,8 +100,13 @@ export class CatalogService {
     });
   }
 
-  createEngine(engine: EngineUpload): Observable<number> {
-    return this.http.put<number>(apiAddress + '/engines/create', engine);
+  createEngine(engine: EngineDetails): Observable<number> {
+    const payload: EngineUpload = {
+      id: engine.id, name: engine.name, type: engine.type.name,
+      manufacturer: engine.manufacturer, price: engine.price, mass: engine.mass, photo: engine.photo,
+      characteristics: engine.characteristics, photos: engine.photos
+    };
+    return this.http.put<number>(apiAddress + '/engines/create', payload);
   }
 
   reloadEngine(id: number|null): void {

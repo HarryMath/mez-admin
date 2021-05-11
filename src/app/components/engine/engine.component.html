@@ -29,7 +29,7 @@
       </label>
       <label>
         <span *ngIf="isEditable()">тип </span>
-        <select class="engine-type" [(ngModel)]="this.type" [disabled]="!isEditable()">
+        <select class="engine-type" [(ngModel)]="engine.type.name" [disabled]="!isEditable()">
           <option value="" disabled selected></option>
           <option *ngFor="let type of catalogService.categories">{{type.name}}</option>
         </select>
@@ -85,8 +85,14 @@
   <div class="engine-photos unselectable" *ngIf="engine.photos.length > 0 || isEditable()">
     <div *ngFor="let photo of engine.photos; index as i">
       <div [style]="'background-image: url(' + photo + ')'"></div>
-      <div class="overlay">
-        <i class="fas fa-trash-alt" (click)="removePhoto(i)"></i>
+      <div class="overlay" *ngIf="isEditable()">
+        <i class="fas fa-trash-alt" (click)="removePhoto(i, false)"></i>
+      </div>
+    </div>
+    <div *ngFor="let photo of addedPhotos; index as i">
+      <div [style]="'background-image: url(' + photo + ')'"></div>
+      <div class="overlay" *ngIf="isEditable()">
+        <i class="fas fa-trash-alt" (click)="removePhoto(i, true)"></i>
       </div>
     </div>
     <div class="add-photo" *ngIf="isEditable()">

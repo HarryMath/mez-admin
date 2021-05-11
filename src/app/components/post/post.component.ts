@@ -147,7 +147,7 @@ export class PostComponent implements OnInit {
 
   getNowDateString(): string {
     const date = new Date();
-    return date.getDate() + PostComponent.MONTHS[date.getMonth()] + date.getFullYear();
+    return date.getDate() + ' ' + PostComponent.MONTHS[date.getMonth()] + ' ' + date.getFullYear();
   }
 
 }
