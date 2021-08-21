@@ -25,30 +25,45 @@
     <div class="engine-info">
       <label>
         <span *ngIf="isEditable()">название </span>
-        <input class="engine-name" type="text" [(ngModel)]="engine.name" [disabled]="!isEditable()">
+        <input  [ngClass]="isEditable() ? '' : 'big'" autofocus
+                type="text" [(ngModel)]="engine.name" [disabled]="!isEditable()">
       </label>
-      <label>
-        <span *ngIf="isEditable()">тип </span>
+      <label class="small" *ngIf="!isEditable()">{{engine.type.name}}, {{engine.manufacturer}}</label>
+      <label *ngIf="isEditable()">
+        <span>тип </span>
         <select class="engine-type" [(ngModel)]="engine.type.name" [disabled]="!isEditable()">
           <option value="" disabled selected></option>
           <option *ngFor="let type of catalogService.categories">{{type.name}}</option>
         </select>
       </label>
-      <label>
-        <span *ngIf="isEditable()">производитель </span>
+      <label *ngIf="isEditable()">
+        <span>производитель </span>
         <select class="engine-manuf" [(ngModel)]="engine.manufacturer" [disabled]="!isEditable()">
           <option value="" disabled selected></option>
           <option *ngFor="let manufacturer of catalogService.manufacturers">{{manufacturer.name}}</option>
         </select>
       </label>
       <label>
-        <span *ngIf="isEditable()">масса </span>
+        <span>масса </span>
         <input class="engine-mass" type="number" [(ngModel)]="engine.mass" [disabled]="!isEditable()"
         [style]="'width: ' + (('0' + engine.mass).length * 8) + 'px'">кг
       </label>
       <label>
-        <span *ngIf="isEditable()">цена </span>
-        ₽<input class="engine-price" type="number" [(ngModel)]="engine.price" [disabled]="!isEditable()">
+        <span>высота оси вращения </span>
+        <input class="engine-mass" type="number" [(ngModel)]="engine.axisHeight" [disabled]="!isEditable()"
+               [style]="'width: ' + (('0' + engine.axisHeight).length * 8) + 'px'">мм
+      </label>
+      <label>
+        <span>цена (лапы) </span>
+        ₽<input class="engine-price" type="number" [(ngModel)]="engine.priceLapy" [disabled]="!isEditable()">
+      </label>
+      <label>
+        <span>цена (комби) </span>
+        ₽<input class="engine-price" type="number" [(ngModel)]="engine.priceCombi" [disabled]="!isEditable()">
+      </label>
+      <label>
+        <span>цена (фланец) </span>
+        ₽<input class="engine-price" type="number" [(ngModel)]="engine.priceFlanets" [disabled]="!isEditable()">
       </label>
     </div>
   </div>
@@ -60,12 +75,19 @@
       <div><div>Номин. частота, <span style="white-space: nowrap">об/мин</span></div></div>
       <div><div>КПД, %</div></div>
       <div><div>cos φ</div></div>
+      <div><div>Iн (115В), А</div></div>
       <div><div>Iн (220В), А</div></div>
       <div><div>Iн (380В), А</div></div>
       <div><div>Iп/Iн</div></div>
       <div><div>Мп/Мн</div></div>
       <div><div>Мmax/Мн</div></div>
       <div><div>Мmin/Мн</div></div>
+      <div><div>Uнс(115), В</div></div>
+      <div><div>Uнс(220/230), В</div></div>
+      <div><div>C(115), мкФ</div></div>
+      <div><div>C(220), мкФ</div></div>
+      <div><div>C(230), мкФ</div></div>
+      <div><div>крит.скольжение, %</div></div>
     </div>
     <div *ngFor="let row of engine.characteristics; let i = index" class="characteristics-data">
       <div *ngIf="isEditable() || isRowValid(i)" class="row">
@@ -73,12 +95,19 @@
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.frequency" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.efficiency" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.cosFi" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal115" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal220" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityNominal380" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.electricityRatio" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsRatio" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMaxRatio" (ngModelChange)="handleCharacteristicsChange()">
         <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.momentsMinRatio" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.voltage115" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.voltage220_230" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.capacity115" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.capacity220" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.capacity230" (ngModelChange)="handleCharacteristicsChange()">
+        <input type="number" [disabled]="!isEditable()" [(ngModel)]="row.criticalSlipping" (ngModelChange)="handleCharacteristicsChange()">
       </div>
     </div>
   </div>

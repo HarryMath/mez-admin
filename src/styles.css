@@ -1,9 +1,9 @@
 :root {
-  --content-size: calc(1020px + 15vw);
+  --content-size: calc(2000px + 30vw);
   --padding-size: calc(10px + 0.5vw);
   --menu-width: calc(210px + 5.25vw);
   --line-height: calc(40px + 1vw);
-  --avatar-height: calc(120px + 3vw);
+  --avatar-height: calc(130px + 5vw);
 
 
   --checkbox-size: calc(17px + 0.425vw);

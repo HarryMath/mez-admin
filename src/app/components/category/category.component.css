@@ -6,7 +6,10 @@ input, select, textarea {
   resize: none; width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
-
+.category-info {
+  width: calc(90% - var(--avatar-height));
+  min-width: 30px; padding: var(--padding-size);
+}
 .post-top {display: flex;}
 .post-info {padding: var(--padding-size)}
 .post-info textarea {
@@ -42,4 +45,16 @@ label{ display: block; position: relative}
   max-width: 100%; max-height: calc(90px + 1.75vw + 0.25vh);
   height: calc(var(--line-height) * 0.45);
   min-height: calc(var(--line-height) * 0.45);
+}
+.category-top {
+  display: flex;
+}
+.category-text {
+  padding: var(--padding-size);
+}
+.category-name {
+  font-weight: bold; color: #4f59a5; font-size: 18px;
+}
+.new .category-name, .editable .category-name {
+  font-weight: 400; font-size: 14px; color: #555;
 }

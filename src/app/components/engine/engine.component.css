@@ -7,7 +7,19 @@ input, select {
 .engine-top {display: flex;}
 .engine-info {padding: var(--padding-size);}
 .engine-info label { position: relative }
-label> span {position: absolute; font-size: calc(8px + 0.2vw); opacity: 0.5; top: 0; left: 0}
+label> span {opacity: 0.5;margin-right: 6px; font-size: calc(10px + 0.25vw)}
+.editable label> span, .new label>span {
+  top: 0; left: 0; position: absolute; font-size: calc(8px + 0.2vw);
+}
+.small {
+  font-size: calc(12px + 0.3vw);
+  opacity: 0.9; line-height: 0.9; margin-bottom: 7px;
+  color: #7a81b5;
+}
+.big {
+  font-weight: bold;
+  font-size: calc(16px + 0.4vw);
+}
 .new .engine-info input, .new .engine-info select,
 .editable .engine-info input, .editable .engine-info select
 { margin-top: calc(12px + 0.3vw)}
@@ -25,17 +37,17 @@ label{ display: block; width: 100%}
 }
 
 .engine-characteristics> .row> div {
-  width: 9.5%; text-align: center;
-  border-right: 1px solid #77889944; display: flex;
-  height: var(--line-height); overflow: hidden;
+  width: 5.875%; text-align: center; font-size: calc(10px + 0.25vw);
+  border-right: 1px solid #77889944; display: flex;font-weight: 500;
+  height: calc(var(--line-height) * 1.1); overflow: hidden;
 }
-.engine-characteristics .row> div> div { margin: auto }
+.engine-characteristics .row> div> div { margin: auto; max-width: 100% }
 .engine-characteristics .row> div:nth-child(2),
-.engine-characteristics .row> input:nth-child(2){width: 14.5%;}
+.engine-characteristics .row> input:nth-child(2){width: 6%;}
 .engine-characteristics .row> div:last-child,
 .engine-characteristics .row> input:last-child{border-right: none}
 .engine-characteristics .row> input {
-  width: 9.5%; text-align: center;
+  width: 5.875%; text-align: center;
   border-right: 1px solid #77889944;
   padding: 5px 0;
   height: calc(var(--line-height) * 0.6);

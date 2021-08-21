@@ -6,6 +6,7 @@ import {apiAddress} from './response.codes';
 
 export interface Category {
   name: string;
+  pageOrder: number;
   photo: string|null;
   shortDescription: string;
   fullDescription: string;
@@ -20,7 +21,7 @@ export class CategoriesService {
 
   addCategoryTemplate(): void {
     this.categories.unshift({
-      name: '', photo: null, shortDescription: '', fullDescription: ''
+      name: '', photo: null, shortDescription: '', fullDescription: '', pageOrder: 0
     });
   }
 

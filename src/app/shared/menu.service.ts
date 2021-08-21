@@ -1,9 +1,8 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class MenuService {
   isOpened = true;
-  ipAddress = '';
 
   constructor() {
     if (localStorage.getItem('menu') !== null) {

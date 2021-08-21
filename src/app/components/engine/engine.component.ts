@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CatalogService, Characteristics, EngineDetails} from '../../shared/catalog.service';
 import {HttpResponse} from '@angular/common/http';
 import {ImagesService} from '../../shared/images.service';
+import {ResponseCodes} from '../../shared/response.codes';
 
 @Component({
   selector: 'app-engine',
@@ -24,7 +25,7 @@ export class EngineComponent implements OnInit {
               public imagesService: ImagesService) { }
 
   ngOnInit(): void {
-    if (this.engine.price === 0) {
+    if (this.engine.name.length === 0) {
       this.isNew = true;
     }
   }
@@ -147,10 +148,13 @@ export class EngineComponent implements OnInit {
 
   save(): void {
     if (this.engine.name.trim().length > 2 &&
-      this.engine.type.name.trim().length > 3 &&
-      this.engine.manufacturer.trim().length > 3 &&
-      this.engine.price > 10)
-    {
+      this.engine.type.name.trim().length > 0 &&
+      this.engine.manufacturer.trim().length > 0 &&
+      this.engine.axisHeight > 0 &&
+      this.engine.priceCombi > 10 &&
+      this.engine.priceFlanets > 10 &&
+      this.engine.priceLapy > 10
+    ) {
       const rowsAmount = this.engine.characteristics.length;
       if (this.isRowEmpty(rowsAmount - 1)) {
         this.engine.characteristics.splice(rowsAmount - 1, 1);
@@ -163,20 +167,21 @@ export class EngineComponent implements OnInit {
         this.handleCharacteristicsChange();
       }
     } else { // @ts-ignore
-      message.show('заполните имя, тип, массу и производилея');
+      message.show('заполните имя, тип, массу, высоту оси вращения и производилея');
     }
   }
 
   saveChanges(): void {
-    this.catalogService.createEngine(this.engine).subscribe(response => {
+    this.catalogService.saveEngine(this.engine, this.isNew).subscribe(response => {
       this.isLoading = false;
-      if (response > 0) { // @ts-ignore
+      if (response === ResponseCodes.SUCCESS) { // @ts-ignore
         window.message.show('двигатель сохранён');
-        this.engine.id = response;
         this.isNew = false; this.onEdit = false;
         this.handleCharacteristicsChange();
+      } else if (response === ResponseCodes.ALREADY_EXISTS) { // @ts-ignore
+        window.message.show('двигатель ' + this.engine.name + ' уже существует');
       } else { // @ts-ignore
-        window.message.show('не удалось сохранить двигатель');
+        window.message.show('не удалось сохранить, код ошибки: ' + response);
       }
     });
   }
@@ -223,7 +228,7 @@ export class EngineComponent implements OnInit {
       this.remove();
     } else {
       this.isLoading = true;
-      this.catalogService.reloadEngine(this.engine.id);
+      this.catalogService.reloadEngine(this.engine.name);
     }
     this.onEdit = false;
   }
@@ -233,8 +238,8 @@ export class EngineComponent implements OnInit {
       this.remove();
       return;
     }
-    this.isLoading = true; // @ts-ignore
-    this.catalogService.deleteEngine(this.engine.id)
+    this.isLoading = true;
+    this.catalogService.deleteEngine(this.engine.name)
       .subscribe(response => {
         if (response === 1) { // @ts-ignore
           window.message.show('двигатель удалён');

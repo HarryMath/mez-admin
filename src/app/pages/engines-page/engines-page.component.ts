@@ -28,4 +28,15 @@ export class EnginesPageComponent implements OnInit {
       });
     });
   }
+
+  uploadFile(event: Event): void { // @ts-ignore
+    if (event != null && event.target != null && event.target.files.length > 0) { // @ts-ignore
+      const file = event.target.files[0];
+      if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) { // @ts-ignore
+        window.message.show('поддерживаются только excel-файлы');
+        return;
+      }
+      this.catalogService.uploadFile(file);
+    }
+  }
 }

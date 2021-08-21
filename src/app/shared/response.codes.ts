@@ -14,5 +14,5 @@ export abstract class ResponseCodes {
   static readonly UNKNOWN_ERROR = -8;
 }
 
-// export const apiAddress = 'https://mez-api.herokuapp.com';
-export const apiAddress = 'http://localhost';
+export const apiAddress = 'https://mez-api.herokuapp.com';
+// export const apiAddress = 'http://localhost';

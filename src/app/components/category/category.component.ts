@@ -48,6 +48,14 @@ export class CategoryComponent implements OnInit {
       this.onEdit ? 'editable' : '';
   }
 
+  getHeight(): number {
+    let height = Math.ceil(
+      this.category.fullDescription.length / Math.pow(window.innerWidth, 0.65) * 1.15
+    ) * 14;
+    height += this.category.fullDescription.split('\n').length * 14;
+    return height >= 14 ? Math.ceil(height) : 14;
+  }
+
   handleAvatarChange(event: Event): void { // @ts-ignore
     if (event.target.files.length > 0) { // @ts-ignore
       const file = event.target.files[0];

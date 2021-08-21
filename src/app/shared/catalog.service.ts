@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Category} from './categories.service';
@@ -13,22 +13,24 @@ export interface CategoryPreview {
 }
 
 export interface EnginePreview {
-  id: number|null;
   name: string;
   manufacturer: string;
   type: string;
-  price: number;
+  minPrice: number;
   mass: number;
+  axisHeight: number;
   photo: string|null;
   characteristics: Characteristics[];
 }
 
 export interface EngineDetails {
-  id: number|null;
   name: string;
   manufacturer: string;
-  price: number;
+  priceLapy: number;
+  priceCombi: number;
+  priceFlanets: number;
   mass: number;
+  axisHeight: number;
   photo: string|null;
   type: Category;
   characteristics: Characteristics[];
@@ -36,15 +38,17 @@ export interface EngineDetails {
 }
 
 export interface EngineUpload {
-  id: number|null;
   name: string;
-  type: string;
   manufacturer: string;
-  price: number;
+  priceLapy: number;
+  priceCombi: number;
+  priceFlanets: number;
   mass: number;
-  photo: string|null;
+  axisHeight: number;
   characteristics: Characteristics[];
   photos: string[];
+  type: string;
+  photo: string|null;
 }
 
 export class Characteristics {
@@ -53,12 +57,20 @@ export class Characteristics {
   frequency: number|null = null;
   efficiency: number|null = null;
   cosFi: number|null = null;
+  electricityNominal115: number|null = null;
   electricityNominal220: number|null = null;
   electricityNominal380: number|null = null;
   electricityRatio: number|null = null;
   momentsRatio: number|null = null;
   momentsMaxRatio: number|null = null;
   momentsMinRatio: number|null = null;
+  voltage115: number|null = null;
+  // tslint:disable-next-line:variable-name
+  voltage220_230: number|null = null;
+  capacity115: number|null = null;
+  capacity220: number|null = null;
+  capacity230: number|null = null;
+  criticalSlipping: number|null = null;
 }
 
 @Injectable({providedIn: 'root'})
@@ -66,14 +78,36 @@ export class CatalogService {
   engines: EngineDetails[] = [];
   categories: CategoryPreview[] = [];
   manufacturers: Manufacturer[] = [];
+  loadingEngines = false;
 
   constructor(private http: HttpClient) {}
 
   loadEngines(): Observable<EngineDetails[]> {
+    this.loadingEngines = true;
     return this.http.get<EngineDetails[]>(apiAddress + '/engines?withDetails=true')
-      .pipe(
-        tap(response => this.engines = response.reverse() )
-      );
+      .pipe(tap(response => {
+        this.engines = response.reverse();
+        this.loadingEngines = false;
+      }));
+  }
+
+  uploadFile(file: File): void {
+    const data = new FormData();
+    data.append('file', file);
+    const uploadRequest = new HttpRequest(
+      'PUT',
+      apiAddress + '/engines/loadFromFile',
+      data);
+    this.loadingEngines = true;
+    this.http.request(uploadRequest).subscribe(event => {
+      if (event instanceof HttpResponse) {
+        this.loadingEngines = false;
+        const response = parseInt(event.body + '', 0);
+        console.log(response); // @ts-ignore
+        window.message.show('загружено ' + response + ' двигателей');
+        this.loadEngines().subscribe();
+      }
+    });
   }
 
   loadCategories(): Observable<CategoryPreview[]> {
@@ -92,30 +126,33 @@ export class CatalogService {
 
   addEngineTemplate(): void {
     this.engines.unshift({
-      id: null, name: '', type: {
-        name: '', shortDescription: '', fullDescription: '', photo: null
-      }, manufacturer: '', price: 0, mass: 0, photo: '',
+      axisHeight: 0, priceCombi: 0, priceFlanets: 0, priceLapy: 0,
+      name: '', type: {
+        name: '', shortDescription: '', fullDescription: '', photo: null, pageOrder: 0
+      }, manufacturer: '', mass: 0, photo: '',
       characteristics: [new Characteristics()],
       photos: []
     });
   }
 
-  createEngine(engine: EngineDetails): Observable<number> {
+  saveEngine(engine: EngineDetails, isNew: boolean): Observable<number> {
     const payload: EngineUpload = {
-      id: engine.id, name: engine.name, type: engine.type.name,
-      manufacturer: engine.manufacturer, price: engine.price, mass: engine.mass, photo: engine.photo,
-      characteristics: engine.characteristics, photos: engine.photos
+      name: engine.name, type: engine.type.name, priceLapy: engine.priceLapy,
+      priceCombi: engine.priceCombi, priceFlanets: engine.priceFlanets,
+      manufacturer: engine.manufacturer, mass: engine.mass, photo: engine.photo,
+      characteristics: engine.characteristics, photos: engine.photos,
+      axisHeight: engine.axisHeight
     };
-    return this.http.put<number>(apiAddress + '/engines/create', payload);
+    const action = isNew ? 'create' : 'update';
+    return this.http.put<number>(apiAddress + '/engines/' + action, payload);
   }
 
-  reloadEngine(id: number|null): void {
-    if (id == null) { return; }
-    this.http.get<EngineDetails>(apiAddress + `/engines/${id}?withDetails=true`)
+  reloadEngine(name: string): void {
+    this.http.get<EngineDetails>(apiAddress + `/engines/${name}?withDetails=true`)
       .subscribe(response => {
         if (response !== null) {
           for (let i = 0; i < this.engines.length; i++) {
-            if (this.engines[i].id === id) {
+            if (this.engines[i].name === name) {
               this.engines[i] = response;
             }
           }
@@ -123,7 +160,7 @@ export class CatalogService {
       });
   }
 
-  deleteEngine(id: number): Observable<number> {
-    return this.http.get<number>(apiAddress + `/engines/${id}/delete`);
+  deleteEngine(name: string): Observable<number> {
+    return this.http.get<number>(apiAddress + `/engines/${name}/delete`);
   }
 }

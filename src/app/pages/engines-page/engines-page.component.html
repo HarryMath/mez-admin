@@ -5,13 +5,23 @@
     <div class="main">
       <div class="main-header row">
         <div class="title"> Двигатели</div>
-        <div class="btn btn-secondary" (click)="catalogService.addEngineTemplate()">добавить +</div>
+        <div style="display:flex;">
+          <div class="btn btn-secondary upload-btn">
+            <div>загрузить из файла</div>
+            <input type="file" class="file-upload"
+                   [disabled]="catalogService.loadingEngines" (change)="uploadFile($event)">
+          </div>
+          <div class="btn btn-secondary" (click)="catalogService.addEngineTemplate()">добавить вручную</div>
+        </div>
       </div>
       <div class="main-content">
-        <app-engine class="item"
-                    *ngFor="let engine of catalogService.engines"
-                    [engine]="engine"
-        ></app-engine>
+        <div *ngIf="catalogService.loadingEngines">загрузка...</div>
+        <div *ngIf="!catalogService.loadingEngines">
+          <app-engine class="item"
+                      *ngFor="let engine of catalogService.engines"
+                      [engine]="engine"
+          ></app-engine>
+        </div>
       </div>
     </div>
   </div>
